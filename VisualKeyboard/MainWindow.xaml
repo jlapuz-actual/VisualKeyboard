@@ -11,6 +11,7 @@
         <Menu DockPanel.Dock="Top" Background="{x:Null}" >
             <MenuItem Header="_File" Foreground="White" >
                 <MenuItem Header="_Open Configuration" Foreground="Black" Command="{Binding OpenDialogCommand}" CommandParameter="{Binding}"/>
+                <MenuItem Header="_Save Configuration" Foreground="Black" Command="{Binding WriteDialogCommand}" CommandParameter="{Binding}"/>
                 <MenuItem Header="_Send To Back" Foreground="Black" Command="{Binding ToggleWindowActiveCommand}"/>
                 <MenuItem Header="_Send Debug Message" Foreground="Black" Command="{Binding DebugViewModelCommand}"/>
                 <MenuItem Header="_Load Default Configuration" Foreground="Black" Command="{Binding LoadDefaultConfigurationCommand}"/>

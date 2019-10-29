@@ -31,6 +31,7 @@
 
         #region Commands
         public RelayCommand OpenDialogCommand { get; private set; }
+        public RelayCommand WriteDialogCommand { get; private set; }
         public RelayCommand ButtonActionCommand { get; private set; }
         public RelayCommand DebugViewModelCommand { get; private set; }
         public RelayCommand ToggleWindowActiveCommand { get; private set; }
@@ -42,6 +43,7 @@
             this.GridModel = new GridModel();
             this.sender = new InputSender();
             OpenDialogCommand = new RelayCommand(param => this.RequestFileDialog());
+            WriteDialogCommand = new RelayCommand(param => this.WriteFileDialog());
             ButtonActionCommand = new RelayCommand(param => this.ButtonAction(param));
             DebugViewModelCommand = new RelayCommand(param => this.DebugViewModel());
             ToggleWindowActiveCommand = new RelayCommand(param => this.ToggleWindowActive(), param => this.Window != null);
@@ -55,9 +57,9 @@
             (int, int, int, int, ushort)[] ps = new (int, int, int, int, ushort)[] 
             { 
                 (0, 0, 1, 1, 0x24), 
-                (1, 0, 2, 2, 0x24), 
-                (0, 1, 1, 1, 0x24), 
-                (0, 2, 1, 1, 0x24), 
+                (1, 0, 2, 2, 0x25), 
+                (0, 1, 1, 1, 0x26), 
+                (0, 2, 1, 1, 0x27), 
                 (5, 2, 2, 1, 0x24), 
                 (1, 2, 4, 1, 0x24), 
                 (2, 3, 1, 1, 0x24), 
@@ -118,6 +120,21 @@
                 DefaultExt = ".yml", // Default file extension
                 FileName = "NewYMLDocument" // Default file name
             };
+            var result = dialog.ShowDialog();
+
+            if (result != true)
+            {
+                return;
+            }
+
+            string filename = dialog.FileName;
+            FileOps fo = new FileOps();
+            var yml = new YmlFileManager();
+
+
+            var graph = yml.GetYML(this.GridModel);
+            fo.Write(graph,filename);
+            
         }
 
         private void DebugViewModel()
