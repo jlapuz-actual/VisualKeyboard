@@ -14,6 +14,16 @@
             definedRows = "*";
             buttonModels = new ObservableCollection<ButtonModel>();
         }
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value;
+                OnPropertyChanged("Name");
+            }
+        }
+
 
         public string DefinedRows
         {
@@ -48,8 +58,8 @@
         public void LoadData(object data)
         {
             var newGridData = (GridModel)data;
-     
 
+            this.Name = newGridData.Name;
             this.ButtonModels = newGridData.ButtonModels;
             this.DefinedColumns = newGridData.DefinedColumns;
             this.DefinedRows = newGridData.DefinedRows;

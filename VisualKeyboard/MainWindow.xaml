@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VisualKeyboard"
         xmlns:utilities="clr-namespace:VisualKeyboard.Utilities"
         mc:Ignorable="d"
-        Title="VisualKeyboard" Height="800" Width="450" Background="Black">
+        Title="{Binding GridModel.Name}" Height="800" Width="450" Background="Black">
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="{x:Null}" >
             <MenuItem Header="_File" Foreground="White" >

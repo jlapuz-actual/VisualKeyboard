@@ -47,30 +47,34 @@
             ButtonActionCommand = new RelayCommand(param => this.ButtonAction(param));
             DebugViewModelCommand = new RelayCommand(param => this.DebugViewModel());
             ToggleWindowActiveCommand = new RelayCommand(param => this.ToggleWindowActive(), param => this.Window != null);
-            LoadDefaultConfigurationCommand = new RelayCommand(param =>this.LoadDefaults());
+            LoadDefaultConfigurationCommand = new RelayCommand(param => this.LoadDefaults());
 
-                        NoActive = false;
+            NoActive = false;
         }
 
         public void LoadDefaults()
         {
-            (int, int, int, int, ushort)[] ps = new (int, int, int, int, ushort)[] 
-            { 
-                (0, 0, 1, 1, 0x24), 
-                (1, 0, 2, 2, 0x25), 
-                (0, 1, 1, 1, 0x26), 
-                (0, 2, 1, 1, 0x27), 
-                (5, 2, 2, 1, 0x24), 
-                (1, 2, 4, 1, 0x24), 
-                (2, 3, 1, 1, 0x24), 
+            (string, int, int, int, int, string)[] ps = new (string, int, int, int, int, string)[]
+            {
+                ("A",0, 0, 1, 1, "A"),
+                ("S",1, 0, 2, 2, "S"),
+                ("D",0, 1, 1, 1, "D"),
+                ("F",0, 2, 1, 1, "F"),
+                ("G",5, 2, 2, 1, "G"),
+                ("H",1, 2, 4, 1, "H"),
+                ("J",2, 3, 1, 1, "J"),
+                ("UPARROW",8, 2, 1, 1, "UPARROW"),
+                ("LEFTARROW",9, 1, 1, 1, "LEFTARROW"),
+                ("DOWNARROW",9, 2, 1, 1, "DOWNARROW"),
+                ("RIGHTARROW",9, 3, 1, 1, "RIGHTARROW"),
             };
             ObservableCollection<ButtonModel> buttonModels = new ObservableCollection<ButtonModel>();
 
-            foreach (var (row, col, rowSpan, colSpan, actionParam) in ps)
+            foreach (var (label, row, col, rowSpan, colSpan, actionParam) in ps)
             {
                 buttonModels.Add(new ButtonModel()
                 {
-                    Label = "button " + row + " " + col,
+                    Label = label,
                     RowCoord = row,
                     ColumnCoord = col,
                     RowSpan = rowSpan,
@@ -81,6 +85,7 @@
 
             GridModel = new GridModel()
             {
+                Name = "ExampleBoard",
                 DefinedColumns = "*,*,*,*",
                 DefinedRows = "*,*,*,*,*,*,*,*,*,*",
                 ButtonModels = buttonModels
@@ -151,8 +156,8 @@
         {
             var parameter = (ButtonModel)param;
             Debug.WriteLine(parameter.ActionParam);
-            sender.SendScanKeyUp(new ushort[] { (ushort)parameter.ActionParam });
-            sender.SendScanKeyDown(new ushort[] { (ushort)parameter.ActionParam });
+            sender.SendScanKeyUp(InputSender.PlainTextToScanCodes[parameter.ActionParam]);
+            sender.SendScanKeyDown(InputSender.PlainTextToScanCodes[parameter.ActionParam]);
         }
 
         #region Extended Window Styles members

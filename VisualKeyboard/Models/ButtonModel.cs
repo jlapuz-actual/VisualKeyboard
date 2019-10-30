@@ -8,7 +8,7 @@
         private int rowSpan;
         private int columnCoord;
         private int rowCoord;
-        private ushort actionParam;
+        private string actionParam;
 
         public string Label
         {
@@ -60,7 +60,7 @@
             }
         }
 
-        public ushort ActionParam
+        public string ActionParam
         {
             get { return actionParam; }
             set
@@ -77,7 +77,7 @@
             rowSpan = 1;
             columnCoord = 0;
             rowCoord = 0;
-            actionParam = 0x0;
+            actionParam = "";
         }
 
         #region INotifyPropertyChanged Members
