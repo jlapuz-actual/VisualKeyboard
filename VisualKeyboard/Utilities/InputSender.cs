@@ -253,10 +253,8 @@
             return sent;
         }
         public uint SendScanKeyDown(UInt16[] keys)
-        {
-            
+        {            
             if (keys.Length == 0) { return 0; }
-
             INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = (uint)EINPUT.KEYBOARD,

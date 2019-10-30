@@ -24,7 +24,6 @@
             }
         }
 
-
         public string DefinedRows
         {
             get { return definedRows; }
