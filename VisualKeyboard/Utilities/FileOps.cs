@@ -29,9 +29,16 @@
         public string Load(string originFile)
         {
             string output;
-            using (var reader = new StreamReader(originFile))
+            try
             {
-                output = reader.ReadToEnd();
+                using (var reader = new StreamReader(originFile))
+                {
+                    output = reader.ReadToEnd();
+                }
+            }
+            catch (System.Exception e)
+            {
+                throw e;
             }
             return output;
         }

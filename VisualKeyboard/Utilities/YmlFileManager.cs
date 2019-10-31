@@ -20,8 +20,19 @@
         }
         public object GetObject(string ymlString)
         {
-            var stringReader = new StringReader(ymlString);
-            var returnObject = deserializer.Deserialize<GridModel>(stringReader);
+            object returnObject;
+            try
+            {
+                using (var stringReader = new StringReader(ymlString))
+                {
+                    returnObject = deserializer.Deserialize<GridModel>(stringReader);
+                }
+
+            }
+            catch (YamlDotNet.Core.YamlException e)
+            {
+                throw e;
+            }
 
             return returnObject;
         }

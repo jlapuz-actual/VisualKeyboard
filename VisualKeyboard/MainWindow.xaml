@@ -12,7 +12,8 @@
             <MenuItem Header="_File" Foreground="White" >
                 <MenuItem Header="_Open Configuration" Foreground="Black" Command="{Binding OpenDialogCommand}" CommandParameter="{Binding}"/>
                 <MenuItem Header="_Save Configuration" Foreground="Black" Command="{Binding WriteDialogCommand}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Send To Back" Foreground="Black" Command="{Binding ToggleWindowActiveCommand}"/>
+                <MenuItem Header="_Reload Configuration" Foreground="Black" Command="{Binding ReloadFileFromDiskCommand}"/>
+                <MenuItem Header="_Toggle Focusable" Foreground="Black" Command="{Binding ToggleWindowActiveCommand}"/>
                 <MenuItem Header="_Send Debug Message" Foreground="Black" Command="{Binding DebugViewModelCommand}"/>
                 <MenuItem Header="_Load Default Configuration" Foreground="Black" Command="{Binding LoadDefaultConfigurationCommand}"/>
             </MenuItem>

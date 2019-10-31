@@ -5,6 +5,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.IO;
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
@@ -16,6 +17,8 @@
         private bool NoActive;
         private GridModel grid;
         private InputSender sender;
+        private string CurrentFile;
+        private string SafeCurrentFile;
 
         public GridModel GridModel
         {
@@ -34,6 +37,7 @@
         public RelayCommand WriteDialogCommand { get; private set; }
         public RelayCommand ButtonActionCommand { get; private set; }
         public RelayCommand DebugViewModelCommand { get; private set; }
+        public RelayCommand ReloadFileFromDiskCommand { get; private set; }
         public RelayCommand ToggleWindowActiveCommand { get; private set; }
         public RelayCommand LoadDefaultConfigurationCommand { get; private set; }
         #endregion
@@ -46,6 +50,7 @@
             WriteDialogCommand = new RelayCommand(param => this.WriteFileDialog());
             ButtonActionCommand = new RelayCommand(param => this.ButtonAction(param));
             DebugViewModelCommand = new RelayCommand(param => this.DebugViewModel());
+            ReloadFileFromDiskCommand = new RelayCommand(param => this.ReloadFileFromDisk());
             ToggleWindowActiveCommand = new RelayCommand(param => this.ToggleWindowActive(), param => this.Window != null);
             LoadDefaultConfigurationCommand = new RelayCommand(param => this.LoadDefaults());
 
@@ -91,13 +96,15 @@
                 ButtonModels = buttonModels
             };
         }
+        
         private void RequestFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                FileName = "", // Default file name
+                FileName = SafeCurrentFile, // Default file name
                 DefaultExt = ".yml", // Default file extension
-                Filter = "Text documents (.yml)|*.yml" // Filter files by extension
+                Filter = "Text documents (.yml)|*.yml", // Filter files by extension
+                Multiselect = false,
             };
 
             bool? result = dialog.ShowDialog();
@@ -108,14 +115,67 @@
                 return;
             }
 
-            string filename = dialog.FileName;
+            if(SetGridModelFromFile(dialog.FileName) != 0)
+            {
+                return;
+            }
+
+            SafeCurrentFile = dialog.SafeFileName;
+            CurrentFile= dialog.FileName;
+        }
+
+        private void ReloadFileFromDisk() 
+        {
+            SetGridModelFromFile(this.CurrentFile);
+        }
+
+        private int SetGridModelFromFile(string file)
+        {
             FileOps fo = new FileOps();
             var yml = new YmlFileManager();
+            object graph;
+            try
+            {
+                var fileRead = fo.Load(file);
+                graph = yml.GetObject(fileRead);
+            }
+            catch (Exception ex)
+            {
+                int returnValue = 2;
+                switch (ex)
+                {
+                    case YamlDotNet.Core.YamlException YMLex:
+                        Debug.WriteLine($"exception thrown");
+                        Debug.WriteLine($"message: {YMLex.Message}");
+                        Debug.WriteLine($"source: {YMLex.Source}");
+                        Debug.WriteLine($"start: {YMLex.Start}");
+                        Debug.WriteLine($"start: {YMLex.Start}");
+                        returnValue = 1;
+                        break;
+                    case FileNotFoundException FNFex:
+                        Debug.WriteLine($"exception thrown");
+                        Debug.WriteLine($"message: {FNFex.Message}");
+                        break;
+                    case DirectoryNotFoundException DNFex:
+                        Debug.WriteLine($"exception thrown");
+                        Debug.WriteLine($"message: {DNFex.Message}");
+                        break;
+                    case OutOfMemoryException OOMex:
+                        Debug.WriteLine($"exception thrown");
+                        Debug.WriteLine($"message: {OOMex.Message}");
+                        break;
+                    case IOException IOex:
+                        Debug.WriteLine($"exception thrown");
+                        Debug.WriteLine($"message: {IOex.Message}");
+                        break;
 
-            var fileRead = fo.Load(filename);
-            var graph = yml.GetObject(fileRead);
+                    default:
+                        break;
+                }
+                return returnValue;
+            }
             this.GridModel = (GridModel)graph;
-
+            return 0;
         }
 
         private void WriteFileDialog()
@@ -123,7 +183,7 @@
             SaveFileDialog dialog = new SaveFileDialog
             {
                 DefaultExt = ".yml", // Default file extension
-                FileName = "NewYMLDocument" // Default file name
+                FileName = CurrentFile // Default file name
             };
             var result = dialog.ShowDialog();
 
@@ -135,7 +195,6 @@
             string filename = dialog.FileName;
             FileOps fo = new FileOps();
             var yml = new YmlFileManager();
-
 
             var graph = yml.GetYML(this.GridModel);
             fo.Write(graph,filename);

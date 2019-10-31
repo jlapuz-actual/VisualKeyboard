@@ -4,17 +4,18 @@
     using System.ComponentModel;
     class GridModel
     {
+        private string name;
         private string definedRows;
         private string definedColumns;
         private ObservableCollection<ButtonModel> buttonModels;
 
         public GridModel()
         {
+            name = "";
             definedColumns = "*";
             definedRows = "*";
             buttonModels = new ObservableCollection<ButtonModel>();
         }
-        private string name;
 
         public string Name
         {
