@@ -29,9 +29,9 @@
                 }
 
             }
-            catch (YamlDotNet.Core.YamlException e)
+            catch (YamlDotNet.Core.YamlException)
             {
-                throw e;
+                throw;
             }
 
             return returnObject;
