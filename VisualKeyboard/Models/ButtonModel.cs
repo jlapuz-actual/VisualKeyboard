@@ -16,7 +16,7 @@
             set
             {
                 label = value;
-                OnPropertyChanged("Content");
+                OnPropertyChanged(nameof( Label ) );
             }
         }
 
@@ -26,7 +26,7 @@
             set
             {
                 columnCoord = value;
-                OnPropertyChanged("ColumnCoord");
+                OnPropertyChanged(nameof( ColumnCoord ) );
             }
         }
 
@@ -36,7 +36,7 @@
             set
             {
                 rowCoord = value;
-                OnPropertyChanged("RowCoord");
+                OnPropertyChanged(nameof( RowCoord ) );
             }
         }
 
@@ -46,7 +46,7 @@
             set
             {
                 colSpan = value;
-                OnPropertyChanged("ColSpan");
+                OnPropertyChanged(nameof( ColSpan ) );
             }
         }
 
@@ -56,7 +56,7 @@
             set
             {
                 rowSpan = value;
-                OnPropertyChanged("RowSpan");
+                OnPropertyChanged(nameof( RowSpan ) );
             }
         }
 
@@ -66,7 +66,7 @@
             set
             {
                 actionParam = value;
-                OnPropertyChanged("ActionParam");
+                OnPropertyChanged(nameof( ActionParam ) );
             }
         }
 

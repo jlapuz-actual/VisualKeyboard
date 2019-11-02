@@ -26,7 +26,7 @@
             set
             {
                 grid = value;
-                OnPropertyChanged("GridModel");
+                OnPropertyChanged(nameof( GridModel ) );
             }
         }
 

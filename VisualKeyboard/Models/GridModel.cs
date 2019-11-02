@@ -21,7 +21,7 @@
         {
             get { return name; }
             set { name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged(nameof( Name ) );
             }
         }
 
@@ -31,7 +31,7 @@
             set
             {
                 definedRows = value;
-                OnPropertyChanged("DefinedRow");
+                OnPropertyChanged(nameof( DefinedRows ) );
             }
         }
 
@@ -41,7 +41,7 @@
             set
             {
                 definedColumns = value;
-                OnPropertyChanged("DefinedColumn");
+                OnPropertyChanged(nameof( DefinedColumns ) );
             }
         }
 
@@ -51,7 +51,7 @@
             set
             {
                 buttonModels = value;
-                OnPropertyChanged("ButtonModels");
+                OnPropertyChanged(nameof( ButtonModels ) );
             }
         }
 
