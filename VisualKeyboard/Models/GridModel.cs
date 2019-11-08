@@ -20,8 +20,10 @@
         public string Name
         {
             get { return name; }
-            set { name = value;
-                OnPropertyChanged(nameof( Name ) );
+            set
+            {
+                name = value;
+                OnPropertyChanged( nameof( Name ) );
             }
         }
 
@@ -31,7 +33,7 @@
             set
             {
                 definedRows = value;
-                OnPropertyChanged(nameof( DefinedRows ) );
+                OnPropertyChanged( nameof( DefinedRows ) );
             }
         }
 
@@ -41,7 +43,7 @@
             set
             {
                 definedColumns = value;
-                OnPropertyChanged(nameof( DefinedColumns ) );
+                OnPropertyChanged( nameof( DefinedColumns ) );
             }
         }
 
@@ -51,11 +53,11 @@
             set
             {
                 buttonModels = value;
-                OnPropertyChanged(nameof( ButtonModels ) );
+                OnPropertyChanged( nameof( ButtonModels ) );
             }
         }
 
-        public void LoadData(object data)
+        public void LoadData( object data )
         {
             var newGridData = (GridModel)data;
 
@@ -69,9 +71,9 @@
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged( string propertyName )
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
         }
 
         #endregion

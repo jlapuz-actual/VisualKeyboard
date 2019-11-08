@@ -6,17 +6,16 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
     using VisualKeyboard.Models;
     using VisualKeyboard.Utilities;
+    using static VisualKeyboard.Utilities.Native.NativeMethods;
 
     class GridViewModel : INotifyPropertyChanged
     {
         private bool NoActive;
         private GridModel grid;
-        private InputSender sender;
         private string CurrentFile;
         private string SafeCurrentFile;
 
@@ -26,13 +25,13 @@
             set
             {
                 grid = value;
-                OnPropertyChanged(nameof( GridModel ) );
+                OnPropertyChanged( nameof( GridModel ) );
             }
         }
 
         public Window Window { get; set; }
 
-        #region Commands
+        #region Command properties
         public RelayCommand OpenDialogCommand { get; private set; }
         public RelayCommand WriteDialogCommand { get; private set; }
         public RelayCommand ButtonActionCommand { get; private set; }
@@ -45,21 +44,20 @@
         public GridViewModel()
         {
             this.GridModel = new GridModel();
-            this.sender = new InputSender();
-            OpenDialogCommand = new RelayCommand(param => this.RequestFileDialog());
-            WriteDialogCommand = new RelayCommand(param => this.WriteFileDialog());
-            ButtonActionCommand = new RelayCommand(param => this.ButtonAction(param));
-            DebugViewModelCommand = new RelayCommand(param => this.DebugViewModel());
-            ReloadFileFromDiskCommand = new RelayCommand(param => this.ReloadFileFromDisk());
-            ToggleWindowActiveCommand = new RelayCommand(param => this.ToggleWindowActive(), param => this.Window != null);
-            LoadDefaultConfigurationCommand = new RelayCommand(param => this.LoadDefaults());
+            OpenDialogCommand = new RelayCommand( param => this.RequestFileDialog() );
+            WriteDialogCommand = new RelayCommand( param => this.WriteFileDialog() );
+            ButtonActionCommand = new RelayCommand( param => this.ButtonAction( param ) );
+            DebugViewModelCommand = new RelayCommand( param => this.DebugViewModel() );
+            ReloadFileFromDiskCommand = new RelayCommand( param => this.ReloadFileFromDisk() );
+            ToggleWindowActiveCommand = new RelayCommand( param => this.ToggleWindowActive(), param => this.Window != null );
+            LoadDefaultConfigurationCommand = new RelayCommand( param => this.LoadDefaults() );
 
             NoActive = false;
         }
 
         public void LoadDefaults()
         {
-            (string, int, int, int, int, string)[] ps = new (string, int, int, int, int, string)[]
+            (string, int, int, int, int, string) [] ps = new (string, int, int, int, int, string) []
             {
                 ("A",0, 0, 1, 1, "A"),
                 ("S",1, 0, 2, 2, "S"),
@@ -75,9 +73,9 @@
             };
             ObservableCollection<ButtonModel> buttonModels = new ObservableCollection<ButtonModel>();
 
-            foreach (var (label, row, col, rowSpan, colSpan, actionParam) in ps)
+            foreach ( var (label, row, col, rowSpan, colSpan, actionParam) in ps )
             {
-                buttonModels.Add(new ButtonModel()
+                buttonModels.Add( new ButtonModel()
                 {
                     Label = label,
                     RowCoord = row,
@@ -85,7 +83,7 @@
                     RowSpan = rowSpan,
                     ColSpan = colSpan,
                     ActionParam = actionParam
-                });
+                } );
             }
 
             GridModel = new GridModel()
@@ -96,7 +94,7 @@
                 ButtonModels = buttonModels
             };
         }
-        
+
         private void RequestFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog
@@ -110,63 +108,62 @@
             bool? result = dialog.ShowDialog();
 
             // Process open file dialog box results
-            if (result != true)
+            if ( result != true )
             {
                 return;
             }
 
-            if(SetGridModelFromFile(dialog.FileName) != 0)
+            if ( SetGridModelFromFile( dialog.FileName ) != 0 )
             {
                 return;
             }
 
             SafeCurrentFile = dialog.SafeFileName;
-            CurrentFile= dialog.FileName;
+            CurrentFile = dialog.FileName;
         }
 
-        private void ReloadFileFromDisk() 
+        private void ReloadFileFromDisk()
         {
-            SetGridModelFromFile(this.CurrentFile);
+            SetGridModelFromFile( this.CurrentFile );
         }
 
-        private int SetGridModelFromFile(string file)
+        private int SetGridModelFromFile( string file )
         {
-            FileOps fo = new FileOps();
             var yml = new YmlFileManager();
             object graph;
             try
             {
-                var fileRead = fo.Load(file);
-                graph = yml.GetObject(fileRead);
+                var fileRead = FileOps.Load( file );
+                graph = yml.GetObject( fileRead );
             }
-            catch (Exception ex)
+            catch ( Exception ex )
             {
                 int returnValue = 2;
-                switch (ex)
+                switch ( ex )
                 {
                     case YamlDotNet.Core.YamlException YMLex:
-                        Debug.WriteLine($"exception thrown");
-                        Debug.WriteLine($"message: {YMLex.Message}");
-                        Debug.WriteLine($"source: {YMLex.Source}");
-                        Debug.WriteLine($"start: {YMLex.Start}");
-                        Debug.WriteLine($"start: {YMLex.Start}");
+                        Debug.WriteLine( $"exception thrown" );
+                        Debug.WriteLine( $"message: {YMLex.Message}" );
+                        Debug.WriteLine( $"source: {YMLex.Source}" );
+                        Debug.WriteLine( $"start: {YMLex.Start}" );
+                        Debug.WriteLine( $"start: {YMLex.Start}" );
                         returnValue = 1;
                         break;
                     case FileNotFoundException FNFex:
-                        Debug.WriteLine($"exception thrown");
-                        Debug.WriteLine($"message: {FNFex.Message}");
+                        Debug.WriteLine( $"exception thrown" );
+                        Debug.WriteLine( $"message: {FNFex.Message}" );
                         break;
                     case DirectoryNotFoundException DNFex:
-                        Debug.WriteLine($"exception thrown");
-                        Debug.WriteLine($"message: {DNFex.Message}");
+                        Debug.WriteLine( $"exception thrown" );
+                        Debug.WriteLine( $"message: {DNFex.Message}" );
                         break;
                     case OutOfMemoryException OOMex:
-                        Debug.WriteLine($"exception thrown");
-                        Debug.WriteLine($"message: {OOMex.Message}");
+                        Debug.WriteLine( $"exception thrown" );
+                        Debug.WriteLine( $"message: {OOMex.Message}" );
                         break;
                     case IOException IOex:
-                        Debug.WriteLine($"exception thrown");
-                        Debug.WriteLine($"message: {IOex.Message}");
+                        Debug.WriteLine( $"exception thrown" );
+                        Debug.WriteLine( $"message: {IOex.Message}" );
                         break;
 
                     default:
@@ -187,74 +184,73 @@
             };
             var result = dialog.ShowDialog();
 
-            if (result != true)
+            if ( result != true )
             {
                 return;
             }
 
             string filename = dialog.FileName;
-            FileOps fo = new FileOps();
             var yml = new YmlFileManager();
 
-            var graph = yml.GetYML(this.GridModel);
-            fo.Write(graph,filename);
-            
+            var graph = yml.GetYML( this.GridModel );
+            FileOps.Write( graph, filename );
+
         }
 
         private void DebugViewModel()
         {
-            Debug.WriteLine(this.GridModel.DefinedColumns);
-            Debug.WriteLine(this.GridModel.DefinedRows);
-            foreach (var item in this.GridModel.ButtonModels)
+            Debug.WriteLine( this.GridModel.DefinedColumns );
+            Debug.WriteLine( this.GridModel.DefinedRows );
+            foreach ( var item in this.GridModel.ButtonModels )
             {
-                Debug.WriteLine(item.Label);
+                Debug.WriteLine( item.Label );
             }
-        }
-
-        private void ButtonAction(object param)
-        {
-            var parameter = (ButtonModel)param;
-            Debug.WriteLine(parameter.ActionParam);
-            sender.SendScanKeyUp(InputSender.PlainTextToScanCodes[parameter.ActionParam]);
-            sender.SendScanKeyDown(InputSender.PlainTextToScanCodes[parameter.ActionParam]);
-        }
-
-        #region Extended Window Styles members
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        private const int GWL_EXSTYLE = (-20);
-        private const int WS_EX_NOACTIVATE = 0x08000000;
-
-        #endregion
-        private void ToggleWindowActive()
-        {
-            WindowInteropHelper helper = new WindowInteropHelper(this.Window);
-            
-            int dwExStyle = GetWindowLong(helper.Handle, GWL_EXSTYLE);
-            if (!NoActive)
+            if ( IntPtr.Size == 8 )
             {
-                dwExStyle |= WS_EX_NOACTIVATE;
+                Debug.WriteLine( "x64 build" );
             }
             else
             {
-                dwExStyle &= ~WS_EX_NOACTIVATE;
+                Debug.WriteLine( "x32 build" );
             }
-            Debug.Write($"toggling noactivate, was {NoActive}, ");
+        }
+
+        private void ButtonAction( object param )
+        {
+            var parameter = (ButtonModel)param;
+            Debug.WriteLine( parameter.ActionParam );
+            InputSender.SendScanKeyUp( InputSender.PlainTextToScanCodes [ parameter.ActionParam ] );
+            InputSender.SendScanKeyDown( InputSender.PlainTextToScanCodes [ parameter.ActionParam ] );
+        }
+
+        private void ToggleWindowActive()
+        {
+            WindowInteropHelper helper = new WindowInteropHelper( this.Window );
+
+            IntPtr dwExStyle = GetWindowLongPtr( helper.Handle, GWL.EXSTYLE );
+            //Debug.WriteLine( $"style value before {dwExStyle.ToInt64()}" );
+            if ( !NoActive )
+            {
+                dwExStyle = IntPtr.Add( dwExStyle, WS_EX_NOACTIVATE );
+            }
+            else
+            {
+                dwExStyle = IntPtr.Subtract( dwExStyle, WS_EX_NOACTIVATE );
+            }
+            //Debug.WriteLine( $"style value after {dwExStyle.ToInt64()}" );
+            //Debug.Write( $"toggling value:NoActive, was {NoActive}, " );
             NoActive = !NoActive;
-            Debug.WriteLine($"now {NoActive}");
-            SetWindowLong(helper.Handle, GWL_EXSTYLE, dwExStyle);
+            //Debug.WriteLine( $"now {NoActive}" );
+            SetWindowLongPtr( helper.Handle, GWL.EXSTYLE, dwExStyle );
 
         }
 
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged( string propertyName )
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
         }
 
         #endregion

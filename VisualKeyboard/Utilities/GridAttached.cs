@@ -4,7 +4,7 @@ namespace VisualKeyboard.Utilities
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    class GridAttached : DependencyObject
+    public class GridAttached : DependencyObject
     {
         //my regards to Rachel Lim for this code https://rachel53461.wordpress.com/2011/09/17/wpf-grids-rowcolumn-count-properties/
 
@@ -21,42 +21,44 @@ namespace VisualKeyboard.Utilities
                 /// property type 
                 /// note: if bindable desired then best to keep to primitive types, 
                 /// string preferable and parse later
-                typeof(string),
-                typeof(GridAttached),
+                typeof( string ),
+                typeof( GridAttached ),
 
                 // <default value>, callback 
                 // logic related to property placed here
-                new PropertyMetadata(String.Empty, DefinedGridRowsChanged)
+                new PropertyMetadata( String.Empty, DefinedGridRowsChanged )
                 );
 
-
-        public static void SetDefinedRows(DependencyObject obj, string value)
+        public static void SetDefinedRows( DependencyObject depObj, string value )
         //required set method, signature: "Set<PropertyName>(DependencyObject,value)>"
         {
-            obj.SetValue(DefinedRowsProperty, value);
+            if ( depObj is null ) return;
+            depObj.SetValue( DefinedRowsProperty, value );
         }
 
-        public static string GetDefinedRows(DependencyObject obj)
+        public static string GetDefinedRows( DependencyObject depObj )
         //required get method, signature: "Get<PropertyName>(DependencyObject)"
         {
-            return obj.GetValue(DefinedRowsProperty).ToString();
+            if ( depObj is null ) return "";
+            return depObj.GetValue( DefinedRowsProperty ).ToString();
         }
 
-        public static void DefinedGridRowsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static void DefinedGridRowsChanged( DependencyObject depObj, DependencyPropertyChangedEventArgs e )
         // logic related to the property goes here
         {
-            string[] RowSetting = ((string)e.NewValue).Split(',');
-            if (obj is Grid || RowSetting.Length != 0)
+            if ( depObj is null ) return;
+            string [] RowSetting = ( (string)e.NewValue ).Split( ',' );
+            if ( depObj is Grid || RowSetting.Length != 0 )
             {
-                Grid grid = (Grid)obj;
+                Grid grid = (Grid)depObj;
                 grid.RowDefinitions.Clear();
-                foreach (string setting in RowSetting)
+                foreach ( string setting in RowSetting )
                 {
                     GridLengthConverter converter = new GridLengthConverter();
                     RowDefinition rowDef = new RowDefinition()
-                    { Height = (GridLength)converter.ConvertFrom(setting.Trim()) };
+                    { Height = (GridLength)converter.ConvertFrom( setting.Trim() ) };
 
-                    grid.RowDefinitions.Add(rowDef);
+                    grid.RowDefinitions.Add( rowDef );
                 }
 
             }
@@ -71,33 +73,37 @@ namespace VisualKeyboard.Utilities
             DependencyProperty.RegisterAttached
             (
                 "DefinedColumns",
-                typeof(string),
-                typeof(GridAttached),
-                new PropertyMetadata(String.Empty, DefinedGridColumnChanged)
+                typeof( string ),
+                typeof( GridAttached ),
+                new PropertyMetadata( String.Empty, DefinedGridColumnChanged )
                 );
-        public static void SetDefinedColumns(DependencyObject obj, string value)
+        public static void SetDefinedColumns( DependencyObject depObj, string value )
         {
-            obj.SetValue(DefinedColumnProperty, value);
+            if ( depObj is null ) return;
+            depObj.SetValue( DefinedColumnProperty, value );
 
         }
 
-        public static string GetDefinedColumns(DependencyObject obj)
+        public static string GetDefinedColumns( DependencyObject depObj )
         {
-            return obj.GetValue(DefinedColumnProperty).ToString();
+            if ( depObj is null ) return "";
+
+            return depObj.GetValue( DefinedColumnProperty ).ToString();
         }
-        public static void DefinedGridColumnChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        public static void DefinedGridColumnChanged( DependencyObject depObj, DependencyPropertyChangedEventArgs e )
         {
-            string[] ColumnSetting = ((string)e.NewValue).Split(',');
-            if (obj is Grid || ColumnSetting.Length != 0)
+            if ( depObj is null ) return;
+            string [] ColumnSetting = ( (string)e.NewValue ).Split( ',' );
+            if ( depObj is Grid || ColumnSetting.Length != 0 )
             {
-                Grid grid = (Grid)obj;
+                Grid grid = (Grid)depObj;
                 grid.ColumnDefinitions.Clear();
-                foreach (string setting in ColumnSetting)
+                foreach ( string setting in ColumnSetting )
                 {
                     GridLengthConverter converter = new GridLengthConverter();
-                    ColumnDefinition rowDef = new ColumnDefinition() { Width = (GridLength)converter.ConvertFrom(setting.Trim()) };
+                    ColumnDefinition rowDef = new ColumnDefinition() { Width = (GridLength)converter.ConvertFrom( setting.Trim() ) };
 
-                    grid.ColumnDefinitions.Add(rowDef);
+                    grid.ColumnDefinitions.Add( rowDef );
 
                 }
             }
