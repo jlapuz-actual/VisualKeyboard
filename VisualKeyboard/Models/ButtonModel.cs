@@ -1,7 +1,7 @@
 ﻿namespace VisualKeyboard.Models
 {
     using System.ComponentModel;
-    class ButtonModel : INotifyPropertyChanged
+    public class ButtonModel : BaseModel, INotifyPropertyChanged
     {
         private string label;
         private int colSpan;
@@ -79,15 +79,5 @@
             rowCoord = 0;
             actionParam = "";
         }
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged( string propertyName )
-        {
-            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
-        }
-
-        #endregion
     }
 }

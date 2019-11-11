@@ -2,7 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    class GridModel
+    public class GridModel : BaseModel, INotifyPropertyChanged
     {
         private string name;
         private string definedRows;
@@ -59,6 +59,7 @@
 
         public void LoadData( object data )
         {
+            if ( data is null ) return;
             var newGridData = (GridModel)data;
 
             this.Name = newGridData.Name;
@@ -67,15 +68,5 @@
             this.DefinedRows = newGridData.DefinedRows;
 
         }
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged( string propertyName )
-        {
-            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
-        }
-
-        #endregion
     }
 }
