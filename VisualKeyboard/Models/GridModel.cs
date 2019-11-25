@@ -23,7 +23,7 @@
             set
             {
                 name = value;
-                OnPropertyChanged( nameof( Name ) );
+                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -33,7 +33,7 @@
             set
             {
                 definedRows = value;
-                OnPropertyChanged( nameof( DefinedRows ) );
+                OnPropertyChanged(nameof(DefinedRows));
             }
         }
 
@@ -43,7 +43,7 @@
             set
             {
                 definedColumns = value;
-                OnPropertyChanged( nameof( DefinedColumns ) );
+                OnPropertyChanged(nameof(DefinedColumns));
             }
         }
 
@@ -53,13 +53,13 @@
             set
             {
                 buttonModels = value;
-                OnPropertyChanged( nameof( ButtonModels ) );
+                OnPropertyChanged(nameof(ButtonModels));
             }
         }
 
-        public void LoadData( object data )
+        public void LoadData(object data)
         {
-            if ( data is null ) return;
+            if (data is null) return;
             var newGridData = (GridModel)data;
 
             this.Name = newGridData.Name;

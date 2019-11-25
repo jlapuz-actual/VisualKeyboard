@@ -14,24 +14,22 @@
             serializer = new SerializerBuilder().Build();
             deserializer = new DeserializerBuilder().Build();
         }
-        public string GetYML( object graph )
+        public string GetYML(object graph)
         {
-            return serializer.Serialize( graph );
+            return serializer.Serialize(graph);
         }
-        public object GetObject( string ymlString )
+        public object GetObject(string ymlString)
         {
             object returnObject;
             try
             {
-                using ( var stringReader = new StringReader( ymlString ) )
-                {
-                    returnObject = deserializer.Deserialize<GridModel>( stringReader );
-                }
+                using var stringReader = new StringReader(ymlString);
+                returnObject = deserializer.Deserialize<GridModel>(stringReader);
 
             }
-            catch ( YamlDotNet.Core.YamlException )
+            catch (YamlDotNet.Core.YamlException)
             {
-                throw;
+                return null;
             }
 
             return returnObject;

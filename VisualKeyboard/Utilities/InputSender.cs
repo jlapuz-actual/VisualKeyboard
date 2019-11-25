@@ -9,13 +9,13 @@
     static class InputSender
     {
 
-        public static ReadOnlyDictionary<string, ushort []> PlainTextToScanCodes
+        public static ReadOnlyDictionary<string, ushort[]> PlainTextToScanCodes
         {
             get
             {
-                return new ReadOnlyDictionary<string, ushort []>
+                return new ReadOnlyDictionary<string, ushort[]>
                     (
-                    new Dictionary<string, ushort []>()
+                    new Dictionary<string, ushort[]>()
                     {
                         { "ESC", new ushort[] { 0x01 } },
                         { "1", new ushort[] { 0x02 } },
@@ -107,9 +107,9 @@
          * as keydown and keyup events are triggered for each entry in the array</returns>
          * 
          */
-        public static uint SendVirtualKeystroke( UInt16 [] keys )
+        public static uint SendVirtualKeystroke(UInt16[] keys)
         {
-            INPUT [] pInputs = keys.Select( key => new INPUT
+            INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -123,9 +123,9 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            var sent = SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
-            pInputs = keys.Select( key => new INPUT
+            }).ToArray();
+            var sent = SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
+            pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -139,15 +139,15 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            sent += SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
+            }).ToArray();
+            sent += SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
 
             return sent;
         }
-        public static uint SendVirtualKeyDown( UInt16 [] keys )
+        public static uint SendVirtualKeyDown(UInt16[] keys)
         {
-            if ( keys.Length == 0 ) { return 0; }
-            INPUT [] pInputs = keys.Select( key => new INPUT
+            if (keys.Length == 0) { return 0; }
+            INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -161,14 +161,14 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            var sent = SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
+            }).ToArray();
+            var sent = SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
             return sent;
         }
-        public static uint SendVirtualKeyUp( UInt16 [] keys )
+        public static uint SendVirtualKeyUp(UInt16[] keys)
         {
-            if ( keys.Length == 0 ) { return 0; }
-            INPUT [] pInputs = keys.Select( key => new INPUT
+            if (keys.Length == 0) { return 0; }
+            INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -182,14 +182,14 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            var sent = SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
+            }).ToArray();
+            var sent = SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
             return sent;
         }
-        public static uint SendScanKeyDown( UInt16 [] keys )
+        public static uint SendScanKeyDown(UInt16[] keys)
         {
-            if ( keys.Length == 0 ) { return 0; }
-            INPUT [] pInputs = keys.Select( key => new INPUT
+            if (keys.Length == 0) { return 0; }
+            INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -203,14 +203,14 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            var sent = SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
+            }).ToArray();
+            var sent = SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
             return sent;
         }
-        public static uint SendScanKeyUp( UInt16 [] keys )
+        public static uint SendScanKeyUp(UInt16[] keys)
         {
-            if ( keys.Length == 0 ) { return 0; }
-            INPUT [] pInputs = keys.Select( key => new INPUT
+            if (keys.Length == 0) { return 0; }
+            INPUT[] pInputs = keys.Select(key => new INPUT
             {
                 type = EINPUT.KEYBOARD,
                 uinput = new UNIONINPUT
@@ -224,8 +224,8 @@
                         dwExtraInfo = UIntPtr.Zero
                     }
                 }
-            } ).ToArray();
-            var sent = SendInput( (uint)pInputs.Length, pInputs, INPUT.SIZE );
+            }).ToArray();
+            var sent = SendInput((uint)pInputs.Length, pInputs, INPUT.SIZE);
             return sent;
         }
     }

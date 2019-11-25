@@ -5,18 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VisualKeyboard"
         xmlns:utilities="clr-namespace:VisualKeyboard.Utilities"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
-        Title="{Binding GridModel.Name}" Height="800" Width="450" Background="Black">
+        Title="{Binding GridModel.Name}" 
+        Height="{Binding Path=UserDataModel.WindowSizeX, Mode=TwoWay}" 
+        Width="{Binding Path=UserDataModel.WindowSizeY, Mode=TwoWay}" 
+        Top="{Binding Path=UserDataModel.PositionY, Mode=TwoWay}"
+        Left="{Binding Path=UserDataModel.PositionX, Mode=TwoWay}"
+        Background="Black"
+        SnapsToDevicePixels="True"
+        >
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="{x:Null}" >
             <MenuItem Header="_File" Foreground="White" >
                 <MenuItem Header="_Open Configuration" Foreground="Black" Command="{Binding OpenDialogCommand}" CommandParameter="{Binding}"/>
+                <MenuItem Header="Open _Recent" Foreground="Black" ItemsSource="{Binding UserDataModel.FileHistoryCollection}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Style.Setters>
+                                <Setter Property="Header" Value="{Binding}"/>
+                                <Setter Property="Command" Value="{Binding 
+                                RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}, 
+                                Path=DataContext.ReloadFileFromHistoryCommand}"/>
+                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                            </Style.Setters>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+
+                </MenuItem>
+                <MenuItem Header="Clear History" Foreground="Black" Command="{Binding ClearConfigurationHistoryCommand}"/>
+                <MenuItem Header="_Refresh Configuration" Foreground="Black" Command="{Binding RefreshConfigurationCommand}" />
                 <MenuItem Header="_Save Configuration" Foreground="Black" Command="{Binding WriteDialogCommand}" CommandParameter="{Binding}"/>
-                <MenuItem Header="_Reload Configuration" Foreground="Black" Command="{Binding ReloadFileFromDiskCommand}"/>
-                <MenuItem Header="_Toggle Focusable" Foreground="Black" Command="{Binding ToggleWindowActiveCommand}"/>
                 <MenuItem Header="_Send Debug Message" Foreground="Black" Command="{Binding DebugViewModelCommand}"/>
                 <MenuItem Header="_Load Default Configuration" Foreground="Black" Command="{Binding LoadDefaultConfigurationCommand}"/>
             </MenuItem>
+            <MenuItem IsChecked="{Binding NoActive}" Header="_Toggle Focusable" Foreground="White" Command="{Binding ToggleWindowActiveCommand}" />
         </Menu>
 
         <ItemsControl ItemsSource="{Binding GridModel.ButtonModels}">

@@ -2,6 +2,7 @@
 namespace VisualKeyboard
 {
     using System.Windows;
+    using VisualKeyboard.Models;
     using VisualKeyboard.ViewModel;
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,13 +11,11 @@ namespace VisualKeyboard
     {
         public MainWindow()
         {
-            GridViewModel vm = new GridViewModel
+            //vm.LoadDefaults();
+            DataContext = new GridViewModel
             {
                 Window = this
             };
-
-            //vm.LoadDefaults();
-            DataContext = vm;
 
             InitializeComponent();
         }

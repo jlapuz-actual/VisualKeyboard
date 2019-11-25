@@ -5,39 +5,40 @@
     static class FileOps
     {
 
-        public static void Write( string toBeWritten, string destinationFile )
+        public static void Write(string toBeWritten, string destinationFile)
         {
             try
             {
-                using var writer = new StreamWriter( destinationFile );
-                writer.Write( toBeWritten );
-                writer.Close();
-                Debug.WriteLine( "file written" );
-                writer.Dispose();
+                if (File.Exists(destinationFile))
+                {
+                    using var writer = new StreamWriter(File.OpenWrite(destinationFile));
+                    writer.Write(toBeWritten);
+                    writer.Close();
+                    Debug.WriteLine("file written");
+                    writer.Dispose();
+                }
             }
-            catch ( System.Exception e )
+            catch (System.Exception e)
             {
-                Debug.WriteLine( e.Message );
+                Debug.WriteLine(e.Message);
                 throw;
             }
         }
-        public static string Load( string originFile )
+        public static string Load(string originFile)
         {
             string output;
             try
             {
-                using var reader = new StreamReader( originFile );
+                if (!File.Exists(originFile))
+                    return null;
+                using var reader = new StreamReader(originFile);
                 output = reader.ReadToEnd();
             }
-            catch ( System.Exception )
+            catch (System.Exception)
             {
                 throw;
             }
             return output;
-        }
-        public static void OpenFileDialog()
-        {
-
         }
     }
 }
