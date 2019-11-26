@@ -12,10 +12,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="WindowSizeX" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">950</Value>
     </Setting>
     <Setting Name="WindowSizeY" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">450</Value>
     </Setting>
     <Setting Name="RememberLastPosition" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

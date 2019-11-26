@@ -60,7 +60,7 @@ namespace VisualKeyboard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("950")]
         public double WindowSizeX {
             get {
                 return ((double)(this["WindowSizeX"]));
@@ -72,7 +72,7 @@ namespace VisualKeyboard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("450")]
         public double WindowSizeY {
             get {
                 return ((double)(this["WindowSizeY"]));
